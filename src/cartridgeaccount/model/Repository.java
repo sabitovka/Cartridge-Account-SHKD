@@ -4,9 +4,8 @@ import java.sql.SQLException;
 
 import cartridgeaccount.database.DBHelper;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
-
-import static cartridgeaccount.utils.Utils.log;
 
 public class Repository {
 
@@ -16,13 +15,7 @@ public class Repository {
 	private ObservableList<Cartridge> cartridges;
 	
 	private Repository() {
-		
-		try {
-			mDB = new DBHelper();
-		} catch (ClassNotFoundException | SQLException e) {
-			e.printStackTrace();
-			log(getClass().getName() + ": " + e.getMessage());
-		}
+		mDB = new DBHelper();
 		cartridges = mDB.selectCartridges();
 	}
 	
@@ -46,8 +39,8 @@ public class Repository {
 	}
 
 	public void addCartrige(Cartridge cartridge) {
-		cartridges.add(cartridge);
-		mDB.insertCartridge(cartridge);
+		if (mDB.insertCartridge(cartridge)) 
+			cartridges.add(cartridge);
 	}
 
 	public void updateCartridge(Cartridge selectedCartridge) {
@@ -59,8 +52,12 @@ public class Repository {
 	}
 
 	public void deleteCartridge(Cartridge cartridge) {
-		cartridges.remove(cartridge);
-		mDB.deleteCartridge(cartridge);
+		if (mDB.deleteCartridge(cartridge))
+			cartridges.remove(cartridge);
+			
 	}
-
+	
+	public boolean checkCartridge(String name, String num) {
+		return mDB.checkCartridge(name, num);
+	}
 }

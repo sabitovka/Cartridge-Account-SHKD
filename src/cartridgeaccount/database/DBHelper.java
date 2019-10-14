@@ -7,28 +7,43 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
-import org.sqlite.SQLiteException;
-
 import cartridgeaccount.model.Cartridge;
+import cartridgeaccount.utils.Log;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 
-import static cartridgeaccount.utils.Utils.log;
+import static cartridgeaccount.utils.Utils.showErrorDlg;
 
-public class DBHelper {
+public class DBHelper extends SQLIteOpenHelper {
 
+	private static final String TAG = DBHelper.class.getName();
+	
+	private static final String DB_NAME = "database.db";
+	
 	private Connection mConnection;
 	
-	public DBHelper() throws ClassNotFoundException, SQLException {
-		mConnection = null;
-		Class.forName("org.sqlite.JDBC");
-		mConnection = DriverManager.getConnection("jdbc:sqlite:database.db");
-		
-		log(getClass().getName() + ": Base connected");
+	public DBHelper() {
+		super(DB_NAME);
+		mConnection = getDatabase().getConnection();
+		Log.d(TAG, "DBHepler constructed");
 	}
 
+	@Override
+	public void onCreate(SQLiteDatabase db) throws SQLException {
+		String sql = "CREATE TABLE [cartridge](\r\n" + 
+				"  [_id_c] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, \r\n" + 
+				"  [uuid] CHAR(40), \r\n" + 
+				"  [producer] INT REFERENCES [producer]([_id]), \r\n" + 
+				"  [name] CHAR(40), \r\n" + 
+				"  [full_name] CHAR(70), \r\n" + 
+				"  [num] CHAR(50), \r\n" + 
+				"  [state] INT(1) REFERENCES [states]([_id_s]) ON DELETE SET NULL ON UPDATE CASCADE, \r\n" + 
+				"  [note] TEXT);";
+		
+		db.getConnection().prepareStatement(sql).executeUpdate();
+	}
 	
 	public ObservableList<Cartridge> selectCartridges() {
         String sql =
@@ -63,7 +78,7 @@ public class DBHelper {
             alert.setHeaderText("Произошла ошибка связи с БД");
             alert.setContentText(e.getMessage());
             alert.showAndWait();
-            log(getClass().getName() + ": " + e.getMessage());
+            //log(getClass().getName() + ": " + e.getMessage());
             return cartridges;
         }
 
@@ -90,7 +105,7 @@ public class DBHelper {
             alert.setHeaderText("Произошла ошибка связи с БД");
             alert.setContentText(e.getMessage());
             alert.showAndWait();
-            log(getClass().getName() + ": " + e.getMessage());
+            Log.d(TAG, getClass().getName() + ": " + e.getMessage());
             return list;
         }
 		
@@ -112,24 +127,15 @@ public class DBHelper {
 
         }catch (SQLException e) {
             e.printStackTrace();
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Произошла ошибка");
-            alert.setHeaderText("Произошла ошибка связи с БД");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
-            log(getClass().getName() + ": " + e.getMessage());
+            showErrorDlg(e);
+            Log.d(TAG, getClass().getName() + ": " + e.getMessage());
             return list;
         }
 		
 		return list;
 	}
 	
-    public void insertCartridge(Cartridge cartridge) {
-    	if (!checkRecord(cartridge)) {
-    		
-    		return;
-    	}
-    	
+    public boolean insertCartridge(Cartridge cartridge) {
         String sql_insert = "INSERT INTO 'cartridge'(" +
                 "uuid, producer, name, full_name, num, state, note) VALUES (?,%s,?,?,?,%s,?)";
         String sql_select_prod = "(SELECT _id FROM producer WHERE title LIKE '" + cartridge.getProducer() + "')";
@@ -139,19 +145,26 @@ public class DBHelper {
             prepareStatement(
                     String.format(sql_insert, sql_select_prod, sql_select_state), cartridge
             ).executeUpdate();
+            return true;
         } catch (SQLException e) {
+        	showErrorDlg(e);
+        	Log.d(TAG, getClass().getName() + ": " + e.getMessage());
             e.printStackTrace();
+            return false;
         }
     }
-
-    private boolean checkRecord(Cartridge cartridge) {
-		String sql = "SELECT num FRoM ? WHERE full_name LIKE ?";
+    
+    //возравщает true если есть какой-то элемент    
+    public boolean checkCartridge(String name, String num) {
+		String sql = "SELECT num FROM cartridge WHERE full_name LIKE ? AND num LIKE ?";
 		try {
 			PreparedStatement statement = mConnection.prepareStatement(sql);
-			ResultSet resSet = statement.executeQuery();
-			resSet.getFetchSize();
+			statement.setString(1, name); 
+			statement.setString(2, num);
+			return statement.executeQuery().next();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
+			showErrorDlg(e);
+        	Log.d(TAG, getClass().getName() + ": " + e.getMessage());
 			e.printStackTrace();
 		}
 		
@@ -168,8 +181,6 @@ public class DBHelper {
         
         try {
         	PreparedStatement statement = mConnection.prepareStatement(String.format(sql_update, sql_select_prod, sql_select_state));
-
-        	System.out.println(String.format(sql_update, sql_select_prod, sql_select_state));
         	
             statement.setString(1, cartridge.getUid().toString());
             statement.setString(2, cartridge.getName());
@@ -180,17 +191,23 @@ public class DBHelper {
             
             statement.executeUpdate();
         } catch (SQLException e) {
+        	showErrorDlg(e);
+        	Log.d(TAG, getClass().getName() + ": " + e.getMessage());
             e.printStackTrace();
         }
     }
 
-    public void deleteCartridge(Cartridge cartridge) {
+    public boolean deleteCartridge(Cartridge cartridge) {
         String sql_delete = "DELETE FROM cartridge WHERE uuid = '" + cartridge.getUid().toString() + "'";
 
         try {
             mConnection.prepareStatement(sql_delete).executeUpdate();
+            return true;
         } catch (SQLException e) {
+        	showErrorDlg(e);
+        	Log.d(TAG, getClass().getName() + ": " + e.getMessage());
             e.printStackTrace();
+            return false;
         }
     }
 
@@ -211,11 +228,11 @@ public class DBHelper {
 		try {
 			if(mConnection != null) {
 				mConnection.close();
-				log(getClass().getName() + ": Connection closed");
+				Log.d(TAG, getClass().getName() + ": Connection closed");
 			}
 			}
 		    catch(SQLException e){
-		    	System.err.println(e);
+	        	Log.d(TAG, getClass().getName() + ": " + e.getMessage());
 		    }
 		
 	}
