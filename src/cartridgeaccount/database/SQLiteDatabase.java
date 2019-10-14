@@ -1,24 +1,26 @@
-package com.karimsabitov.mysqliteopenhelper;
+package cartridgeaccount.database;
 
-import com.karimsabitov.mysqliteopenhelper.utils.Log;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
-import java.sql.*;
+import cartridgeaccount.utils.Log;
 
 public class SQLiteDatabase {
 
-    private final String TAG = getClass().getSimpleName();
+    private final String TAG = getClass().getName();
 
     private Connection mConnection;
 
     public SQLiteDatabase(String name) {
         try {
-            Class.forName("org:sqlite:JDBC");
+            Class.forName("org.sqlite.JDBC");
 
             String url = "jdbc:sqlite:" + name;
 
             mConnection = DriverManager.getConnection(url);
 
-            Log.d(TAG, "Р‘Р°Р·Р° РїРѕРґРєР»СЋС‡РµРЅР°");
+            Log.d(TAG, "База подключена, " + url);
 
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();

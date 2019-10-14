@@ -52,6 +52,7 @@ public class CartridgeEditDialogController {
     
     private Stage stage;
     private boolean okClicked;
+    private boolean edited;
     private Main mainApp;
     
     private Cartridge mCartridge;
@@ -94,17 +95,25 @@ public class CartridgeEditDialogController {
     
     @FXML
     private void handleOk() {
-    	if (validInput()) {
-    		mCartridge.setState(StateCB.getValue());
-    		mCartridge.setProducer(ProdCB.getValue());
-    		mCartridge.setName(NameTF.getText());
-    		
-    		mCartridge.setNote(NoteTF.getText());
-    		mCartridge.setNum(NumTF.getText());
-    		
-    		okClicked = true;
-    		stage.close();
-    	}
+    	if (validInput())
+    		if (!Repository.getInstance().checkCartridge(FullNameTF.getText(), NumTF.getText())) {
+	    		mCartridge.setState(StateCB.getValue());
+	    		mCartridge.setProducer(ProdCB.getValue());
+	    		mCartridge.setName(NameTF.getText());
+	    		
+	    		mCartridge.setNote(NoteTF.getText());
+	    		mCartridge.setNum(NumTF.getText());
+	    		
+	    		okClicked = true;
+	    		stage.close();
+    		}
+    		else {
+    			Alert alert = new Alert(AlertType.ERROR);
+    			alert.setTitle("Ошибка добавления");
+    			alert.setHeaderText("Данный картридж уже существует");
+    			alert.showAndWait();
+    			
+    		}
     }
 
     private boolean validInput() {
@@ -146,6 +155,10 @@ public class CartridgeEditDialogController {
     
     public boolean isOkClicked() {
     	return okClicked;
+    }
+    
+    public boolean isEdited() {
+    	return edited;
     }
     
     private void setFullNameTF() {

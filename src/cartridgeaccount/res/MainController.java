@@ -7,10 +7,13 @@ import java.util.UUID;
 import cartridgeaccount.Main;
 import cartridgeaccount.model.Cartridge;
 import cartridgeaccount.model.Repository;
+import cartridgeaccount.utils.Log;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.input.MouseButton;
+import javafx.scene.layout.Background;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TableColumn;
@@ -19,7 +22,9 @@ import javafx.scene.control.TableView;
 
 public class MainController {
 
-    @FXML
+    private static final String TAG = MainController.class.getName();
+
+	@FXML
     private ResourceBundle resources;
 
     @FXML
@@ -70,7 +75,7 @@ public class MainController {
         mTable.setRowFactory(tv -> {
         	TableRow<Cartridge> row = new TableRow<>();
         	row.setOnMouseClicked(event -> {
-        		if (event.getClickCount() == 2 && (! row.isEmpty())) {
+        		if (event.getClickCount() == 2 && (! row.isEmpty() && event.getButton() == MouseButton.PRIMARY)) {
         			handleEditCartridge(null);
         		}
         	});
@@ -82,8 +87,8 @@ public class MainController {
     private void handleEditCartridge(ActionEvent event) {
     	Cartridge selectedCartridge = mTable.getSelectionModel().getSelectedItem();
     	if (selectedCartridge != null) {
-    		boolean okClicked = mainApp.showCartridgeEditDialog(selectedCartridge);
-    		if (okClicked) {
+    		boolean okClickedAndOkClicked = mainApp.showCartridgeEditDialog(selectedCartridge);
+    		if (okClickedAndOkClicked) {
     			Repository.getInstance().updateCartridge(selectedCartridge);
     		}
     	}

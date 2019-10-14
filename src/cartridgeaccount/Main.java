@@ -1,7 +1,6 @@
 package cartridgeaccount;
 	
 import java.io.IOException;
-import java.util.Observable;
 
 import cartridgeaccount.model.Cartridge;
 import cartridgeaccount.model.Repository;
@@ -13,23 +12,18 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.scene.Scene;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.VBox;
 import javafx.fxml.FXMLLoader;
 
 
 public class Main extends Application {
 	
-	private Stage primaryStage;
+	private Stage mPrimaryStage;
 	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			primaryStage = primaryStage;
+			mPrimaryStage = primaryStage;
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("res/Main.fxml"));
 			AnchorPane root = loader.load();
@@ -60,7 +54,7 @@ public class Main extends Application {
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Изменить картридж");
 			dialogStage.initModality(Modality.APPLICATION_MODAL);
-			dialogStage.initOwner(primaryStage);
+			dialogStage.initOwner(mPrimaryStage);
 			Scene scene = new Scene(anchorPane);
 			dialogStage.setScene(scene);
 			dialogStage.setResizable(false);
@@ -72,7 +66,7 @@ public class Main extends Application {
 			
 			dialogStage.showAndWait();
 			
-			return controller.isOkClicked();
+			return controller.isOkClicked() && controller.isEdited();
 		} catch(IOException e) {
 			e.printStackTrace();
 			return false;
