@@ -1,10 +1,9 @@
 package cartridgeaccount.model;
 
-import java.sql.SQLException;
+import java.util.Date;
 
 import cartridgeaccount.database.DBHelper;
 import javafx.collections.FXCollections;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 public class Repository {
@@ -59,5 +58,11 @@ public class Repository {
 	
 	public boolean checkCartridge(String name, String num) {
 		return mDB.checkCartridge(name, num);
+	}
+
+	public ObservableList<Refueling> getRefuelings() {
+		return FXCollections.observableArrayList(
+				new Refueling(new Date(), new Date())
+		);
 	}
 }

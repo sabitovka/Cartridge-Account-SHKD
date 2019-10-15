@@ -87,20 +87,30 @@
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <Label layoutX="125.0" layoutY="14.0" text="История заправок текущего картриджа" textAlignment="CENTER" AnchorPane.topAnchor="8.0">
+                  <Label layoutX="67.0" layoutY="8.0" text="История заправок текущего картриджа" textAlignment="CENTER" AnchorPane.topAnchor="8.0">
                      <font>
-                        <Font size="14.0" />
+                        <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
-                  <TableView layoutX="10.0" layoutY="48.0" prefHeight="274.0" prefWidth="488.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="32.0">
+                  <TableView fx:id="refTable" layoutX="10.0" layoutY="48.0" prefHeight="274.0" prefWidth="488.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="32.0">
                     <columns>
-                      <TableColumn editable="false" prefWidth="75.0" text="Дата отправки" />
-                      <TableColumn prefWidth="75.0" text="Дата прибытия" />
+                      <TableColumn fx:id="startDateColumn" editable="false" prefWidth="75.0" text="Дата отправки" />
+                      <TableColumn fx:id="endDateColumn" prefWidth="75.0" text="Дата прибытия" />
                     </columns>
                      <columnResizePolicy>
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                   </TableView>
+                  <Button layoutX="364.0" layoutY="6.0" mnemonicParsing="false" text="Добавить" AnchorPane.topAnchor="4.0">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="439.0" layoutY="6.0" mnemonicParsing="false" text="Удалить" AnchorPane.topAnchor="4.0">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Button>
                </children>
             </AnchorPane>
         </content>
@@ -109,9 +119,9 @@
         <content>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <Label layoutX="136.0" layoutY="14.0" text="История установок на компьютерах" AnchorPane.topAnchor="8.0">
+                  <Label layoutX="75.0" layoutY="4.0" text="История установок на компьютерах" AnchorPane.topAnchor="4.0">
                      <font>
-                        <Font size="14.0" />
+                        <Font name="System Bold" size="14.0" />
                      </font>
                   </Label>
                   <TableView layoutX="14.0" layoutY="28.0" prefHeight="291.0" prefWidth="478.0" AnchorPane.leftAnchor="8.0" AnchorPane.rightAnchor="8.0" AnchorPane.topAnchor="32.0">
@@ -124,6 +134,16 @@
                         <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                      </columnResizePolicy>
                   </TableView>
+                  <Button layoutX="439.0" layoutY="2.0" mnemonicParsing="false" text="Удалить" AnchorPane.topAnchor="4.0">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Button>
+                  <Button layoutX="360.0" layoutY="2.0" mnemonicParsing="false" text="Добавить" AnchorPane.rightAnchor="79.0" AnchorPane.topAnchor="4.0">
+                     <font>
+                        <Font size="11.0" />
+                     </font>
+                  </Button>
                </children>
             </AnchorPane>
         </content>

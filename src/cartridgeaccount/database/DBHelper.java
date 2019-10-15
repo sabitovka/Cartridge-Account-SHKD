@@ -1,14 +1,23 @@
 package cartridgeaccount.database;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Scanner;
 import java.util.UUID;
 
 import cartridgeaccount.model.Cartridge;
 import cartridgeaccount.utils.Log;
+import cartridgeaccount.utils.Utils;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
@@ -32,17 +41,26 @@ public class DBHelper extends SQLIteOpenHelper {
 
 	@Override
 	public void onCreate(SQLiteDatabase db) throws SQLException {
-		String sql = "CREATE TABLE [cartridge](\r\n" + 
-				"  [_id_c] INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, \r\n" + 
-				"  [uuid] CHAR(40), \r\n" + 
-				"  [producer] INT REFERENCES [producer]([_id]), \r\n" + 
-				"  [name] CHAR(40), \r\n" + 
-				"  [full_name] CHAR(70), \r\n" + 
-				"  [num] CHAR(50), \r\n" + 
-				"  [state] INT(1) REFERENCES [states]([_id_s]) ON DELETE SET NULL ON UPDATE CASCADE, \r\n" + 
-				"  [note] TEXT);";
+		FileReader reader;
+		String[] filenames = {
+			"create table cartridge.sql", "create table producer.sql", "create table refuelings.sql", "create table settings.sql", "create table states.sql" 
+		};
 		
-		db.getConnection().prepareStatement(sql).executeUpdate();
+		try {
+			for (int i = 0; i < filenames.length; i++) {
+				reader = new FileReader(filenames[i]);
+				Scanner scan = new Scanner(reader);
+				StringBuilder stringBuilder = new StringBuilder();
+				while (scan.hasNext()) {
+					stringBuilder.append(scan.nextLine());
+				}
+				db.getConnection().prepareStatement(stringBuilder.toString()).executeUpdate();
+			}
+		} catch (FileNotFoundException e) {
+			Utils.showErrorDlg(e);
+			Log.d(TAG, e.getMessage());
+			e.printStackTrace();
+		}
 	}
 	
 	public ObservableList<Cartridge> selectCartridges() {

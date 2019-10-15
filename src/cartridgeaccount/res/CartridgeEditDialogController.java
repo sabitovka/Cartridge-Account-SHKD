@@ -1,11 +1,16 @@
 package cartridgeaccount.res;
 
 import java.net.URL;
+import java.util.Date;
 import java.util.ResourceBundle;
+
+import com.sun.swing.internal.plaf.metal.resources.metal_zh_TW;
 
 import cartridgeaccount.Main;
 import cartridgeaccount.model.Cartridge;
+import cartridgeaccount.model.Refueling;
 import cartridgeaccount.model.Repository;
+import cartridgeaccount.ui.DatePickerCell;
 import cartridgeaccount.utils.Log;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,18 +18,32 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 
 public class CartridgeEditDialogController {
 
 	public enum ActionMode { ADD, EDIT}
 	
 	private static final String TAG = CartridgeEditDialogController.class.getName(); 
+	
+	@FXML
+	private TableColumn<Refueling, Date> startDateColumn;
+
+	@FXML
+	private TableColumn<Refueling, Date> endDateColumn;
+	
+	@FXML
+    private TableView<Refueling> refTable;
 	
 	@FXML
     private Tab tabRefuelings;
