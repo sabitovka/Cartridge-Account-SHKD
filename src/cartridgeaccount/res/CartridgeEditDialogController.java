@@ -6,11 +6,13 @@ import java.util.ResourceBundle;
 import cartridgeaccount.Main;
 import cartridgeaccount.model.Cartridge;
 import cartridgeaccount.model.Repository;
+import cartridgeaccount.utils.Log;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.Alert.AlertType;
@@ -20,6 +22,16 @@ import javafx.stage.Stage;
 
 public class CartridgeEditDialogController {
 
+	public enum ActionMode { ADD, EDIT}
+	
+	private static final String TAG = CartridgeEditDialogController.class.getName(); 
+	
+	@FXML
+    private Tab tabRefuelings;
+
+    @FXML
+    private Tab tabSettings;
+	
     @FXML
     private ResourceBundle resources;
 
@@ -52,8 +64,8 @@ public class CartridgeEditDialogController {
     
     private Stage stage;
     private boolean okClicked;
-    private boolean edited;
     private Main mainApp;
+    private ActionMode actionMode;
     
     private Cartridge mCartridge;
     
@@ -95,25 +107,26 @@ public class CartridgeEditDialogController {
     
     @FXML
     private void handleOk() {
-    	if (validInput())
-    		if (!Repository.getInstance().checkCartridge(FullNameTF.getText(), NumTF.getText())) {
-	    		mCartridge.setState(StateCB.getValue());
-	    		mCartridge.setProducer(ProdCB.getValue());
-	    		mCartridge.setName(NameTF.getText());
-	    		
-	    		mCartridge.setNote(NoteTF.getText());
-	    		mCartridge.setNum(NumTF.getText());
-	    		
-	    		okClicked = true;
-	    		stage.close();
+    	if (validInput()) {
+    		if (actionMode == ActionMode.ADD) {
+    			if (Repository.getInstance().checkCartridge(FullNameTF.getText(), NumTF.getText())) {
+    		    	Alert alert = new Alert(AlertType.ERROR);
+    		    	alert.setTitle("Ошибка добавления");
+    		    	alert.setHeaderText("Данный картридж уже существует");
+    		    	alert.showAndWait();		
+    		    	return;
+    			}
     		}
-    		else {
-    			Alert alert = new Alert(AlertType.ERROR);
-    			alert.setTitle("Ошибка добавления");
-    			alert.setHeaderText("Данный картридж уже существует");
-    			alert.showAndWait();
-    			
-    		}
+	    	mCartridge.setState(StateCB.getValue());
+	    	mCartridge.setProducer(ProdCB.getValue());
+	    	mCartridge.setName(NameTF.getText());
+	    		
+	    	mCartridge.setNote(NoteTF.getText());
+	    	mCartridge.setNum(NumTF.getText());
+	    		
+	    	okClicked = true;
+	    	stage.close();
+    	}
     }
 
     private boolean validInput() {
@@ -157,12 +170,21 @@ public class CartridgeEditDialogController {
     	return okClicked;
     }
     
-    public boolean isEdited() {
-    	return edited;
-    }
-    
     private void setFullNameTF() {
     	FullNameTF.setText(
     			ProdCB.getValue() + " " + NameTF.getText());
     }
+
+	public void setActionMode(ActionMode actionMode) {
+		this.actionMode = actionMode;
+		if (actionMode == ActionMode.ADD) {
+			tabRefuelings.setDisable(true);
+			tabSettings.setDisable(true);
+		}
+		if (actionMode == ActionMode.EDIT) {
+			tabRefuelings.setDisable(false);
+			tabSettings.setDisable(false);
+		}
+		
+	}
 }

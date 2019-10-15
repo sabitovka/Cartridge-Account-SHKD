@@ -10,7 +10,7 @@
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cartridgeaccount.res.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cartridgeaccount.res.MainController">
    <children>
       <MenuBar layoutX="139.0" layoutY="106.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
@@ -43,10 +43,10 @@
       </MenuBar>
       <TableView id="CartridgeTaleView" fx:id="mTable" accessibleRole="IMAGE_VIEW" layoutX="22.0" layoutY="33.0" prefHeight="351.0" prefWidth="568.0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="32.0">
         <columns>
-            <TableColumn fx:id="CNameCol" minWidth="0.0" prefWidth="159.0" text="Картридж" />
-          <TableColumn fx:id="CNumCol" minWidth="0.0" prefWidth="121.0" text="Номер" />
-            <TableColumn fx:id="CStateCol" minWidth="0.0" prefWidth="147.0" text="Состояние" />
-            <TableColumn fx:id="CNoteCol" minWidth="0.0" prefWidth="138.0" text="Примечание" />
+            <TableColumn fx:id="CNameCol" editable="false" minWidth="0.0" prefWidth="159.0" text="Картридж" />
+          <TableColumn fx:id="CNumCol" editable="false" minWidth="0.0" prefWidth="121.0" text="Номер" />
+            <TableColumn fx:id="CStateCol" editable="false" minWidth="0.0" prefWidth="147.0" text="Состояние" />
+            <TableColumn fx:id="CNoteCol" editable="false" minWidth="0.0" prefWidth="138.0" text="Примечание" />
         </columns>
          <contextMenu>
             <ContextMenu>
@@ -58,6 +58,9 @@
               </items>
             </ContextMenu>
          </contextMenu>
+         <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+         </columnResizePolicy>
       </TableView>
    </children>
 </AnchorPane>

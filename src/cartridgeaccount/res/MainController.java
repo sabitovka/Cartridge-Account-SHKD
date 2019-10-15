@@ -7,6 +7,7 @@ import java.util.UUID;
 import cartridgeaccount.Main;
 import cartridgeaccount.model.Cartridge;
 import cartridgeaccount.model.Repository;
+import cartridgeaccount.res.CartridgeEditDialogController.ActionMode;
 import cartridgeaccount.utils.Log;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -87,8 +88,8 @@ public class MainController {
     private void handleEditCartridge(ActionEvent event) {
     	Cartridge selectedCartridge = mTable.getSelectionModel().getSelectedItem();
     	if (selectedCartridge != null) {
-    		boolean okClickedAndOkClicked = mainApp.showCartridgeEditDialog(selectedCartridge);
-    		if (okClickedAndOkClicked) {
+    		boolean okClicked = mainApp.showCartridgeEditDialog(selectedCartridge, CartridgeEditDialogController.ActionMode.EDIT);
+    		if (okClicked) {
     			Repository.getInstance().updateCartridge(selectedCartridge);
     		}
     	}
@@ -97,7 +98,7 @@ public class MainController {
     @FXML
     private void handleAddCartridge(ActionEvent event) {
     	Cartridge cartridge = new Cartridge(UUID.randomUUID(), "", "", "", "", "");
-    	boolean isOkClicked = mainApp.showCartridgeEditDialog(cartridge);
+    	boolean isOkClicked = mainApp.showCartridgeEditDialog(cartridge, CartridgeEditDialogController.ActionMode.ADD);
     	if(isOkClicked) {
     		Repository.getInstance().addCartrige(cartridge);
     	}
@@ -123,7 +124,7 @@ public class MainController {
 	    if (selCartridge != null) {
 	    	Cartridge cartridge = new Cartridge(selCartridge);
 	    	cartridge.setNum("");
-	    	boolean isOkClicked = mainApp.showCartridgeEditDialog(cartridge);
+	    	boolean isOkClicked = mainApp.showCartridgeEditDialog(cartridge, ActionMode.ADD);
 	    	if(isOkClicked) {
 	    		Repository.getInstance().addCartrige(cartridge);
 	    	}

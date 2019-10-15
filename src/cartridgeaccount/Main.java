@@ -12,6 +12,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.scene.Scene;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.fxml.FXMLLoader;
 
@@ -45,11 +46,11 @@ public class Main extends Application {
 		return Repository.getInstance().getCartridges();
 	}
 
-	public boolean showCartridgeEditDialog(Cartridge cartridge) {
+	public boolean showCartridgeEditDialog(Cartridge cartridge, CartridgeEditDialogController.ActionMode actionMode) {
 		try {
 			FXMLLoader loader = new FXMLLoader();
 			loader.setLocation(Main.class.getResource("res/CartridgeEditDialog.fxml"));
-			AnchorPane anchorPane = (AnchorPane) loader.load();
+			TabPane anchorPane = (TabPane) loader.load();
 			
 			Stage dialogStage = new Stage();
 			dialogStage.setTitle("Изменить картридж");
@@ -63,10 +64,11 @@ public class Main extends Application {
 			CartridgeEditDialogController controller = loader.getController();
 			controller.setDialogStage(dialogStage);
 			controller.setCartridge(cartridge);
+			controller.setActionMode(actionMode);
 			
 			dialogStage.showAndWait();
 			
-			return controller.isOkClicked() && controller.isEdited();
+			return controller.isOkClicked();
 		} catch(IOException e) {
 			e.printStackTrace();
 			return false;
