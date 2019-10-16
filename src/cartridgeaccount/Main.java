@@ -1,12 +1,14 @@
 package cartridgeaccount;
 	
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintStream;
 
 import cartridgeaccount.model.Cartridge;
 import cartridgeaccount.model.Repository;
 import cartridgeaccount.res.CartridgeEditDialogController;
 import cartridgeaccount.res.MainController;
-import cartridgeaccount.res.SearchDialogController;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.stage.Modality;
@@ -103,7 +105,8 @@ public class Main extends Application {
 		}
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws FileNotFoundException {
+		System.setOut(new PrintStream(new File("log.txt")));
 		launch(args);
 		Repository.getInstance().closeConnection();
 	}

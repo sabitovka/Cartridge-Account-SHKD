@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.Scanner;
 import java.util.UUID;
 
+import cartridgeaccount.Main;
 import cartridgeaccount.model.Cartridge;
 import cartridgeaccount.utils.Log;
 import cartridgeaccount.utils.Utils;
@@ -42,7 +43,7 @@ public class DBHelper extends SQLIteOpenHelper {
 		
 		try {
 			for (int i = 0; i < filenames.length; i++) {
-				reader = new FileReader(filenames[i]);
+				reader = new FileReader("src/assets/" + filenames[i]);
 				Scanner scan = new Scanner(reader);
 				StringBuilder stringBuilder = new StringBuilder();
 				while (scan.hasNext()) {
