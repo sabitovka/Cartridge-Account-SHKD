@@ -1,0 +1,8 @@
+cartridgeaccount.database.SQLiteDatabase: База подключена, jdbc:sqlite:database.db
+cartridgeaccount.database.DBHelper: DBHepler constructed
+cartridgeaccount.database.DBHelper: SELECT c.*, p.title as title_p, s.title as title_s 
+FROM [cartridge] as c 
+LEFT JOIN [producer] as p ON c.[producer] = p.[_id]
+LEFT JOIN states as s ON c.state = s.[_id_s]
+
+cartridgeaccount.database.DBHelper: cartridgeaccount.database.DBHelper: Connection closed

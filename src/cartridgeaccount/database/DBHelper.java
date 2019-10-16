@@ -1,7 +1,9 @@
 package cartridgeaccount.database;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.net.URISyntaxException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -43,7 +45,7 @@ public class DBHelper extends SQLIteOpenHelper {
 		
 		try {
 			for (int i = 0; i < filenames.length; i++) {
-				reader = new FileReader("src/assets/" + filenames[i]);
+				reader = new FileReader(new File(Main.class.getResource("..//assets/" + filenames[i]).toURI()));//"src/assets/" + filenames[i]);
 				Scanner scan = new Scanner(reader);
 				StringBuilder stringBuilder = new StringBuilder();
 				while (scan.hasNext()) {
@@ -52,6 +54,10 @@ public class DBHelper extends SQLIteOpenHelper {
 				db.getConnection().prepareStatement(stringBuilder.toString()).executeUpdate();
 			}
 		} catch (FileNotFoundException e) {
+			Utils.showErrorDlg(e);
+			Log.d(TAG, e.getMessage());
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
 			Utils.showErrorDlg(e);
 			Log.d(TAG, e.getMessage());
 			e.printStackTrace();
@@ -94,11 +100,8 @@ public class DBHelper extends SQLIteOpenHelper {
 
         }catch (SQLException e) {
             e.printStackTrace();
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Произошла ошибка");
-            alert.setHeaderText("Произошла ошибка связи с БД");
-            alert.setContentText(e.getMessage());
-            alert.showAndWait();
+            Utils.showErrorDlg(e);
+            Log.d(TAG, e.getMessage());
             //log(getClass().getName() + ": " + e.getMessage());
             return cartridges;
         }
