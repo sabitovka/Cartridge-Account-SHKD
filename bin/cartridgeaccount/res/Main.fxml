@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.ContextMenu?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.input.KeyCodeCombination?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cartridgeaccount.res.MainController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="cartridgeaccount.res.MainController">
    <children>
+      <TextField fx:id="SearchTF" layoutX="175.0" layoutY="42.0" AnchorPane.leftAnchor="175.0" AnchorPane.topAnchor="42.0" />
       <MenuBar layoutX="139.0" layoutY="106.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <menus>
           <Menu mnemonicParsing="false" text="Файл">
@@ -31,7 +36,7 @@
                   <MenuItem fx:id="DuplicateMenuItem" mnemonicParsing="false" onAction="#handleDuplicateCartridge" text="Дублировать" />
                   <MenuItem fx:id="DeleteMenuItem" mnemonicParsing="false" onAction="#handleDeleteCartridge" text="Удалить" />
                   <SeparatorMenuItem mnemonicParsing="false" />
-                  <MenuItem mnemonicParsing="false" text="Найти" />
+                  <MenuItem mnemonicParsing="false" onAction="#handleSearchCartridge" text="Найти" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Помощь">
@@ -41,7 +46,7 @@
           </Menu>
         </menus>
       </MenuBar>
-      <TableView id="CartridgeTaleView" fx:id="mTable" accessibleRole="IMAGE_VIEW" layoutX="22.0" layoutY="33.0" prefHeight="351.0" prefWidth="568.0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="32.0">
+      <TableView id="CartridgeTaleView" fx:id="mTable" accessibleRole="IMAGE_VIEW" layoutX="22.0" layoutY="76.0" prefHeight="308.0" prefWidth="568.0" AnchorPane.bottomAnchor="16.0" AnchorPane.leftAnchor="16.0" AnchorPane.rightAnchor="16.0" AnchorPane.topAnchor="76.0">
         <columns>
             <TableColumn fx:id="CNameCol" editable="false" minWidth="0.0" prefWidth="159.0" text="Картридж" />
           <TableColumn fx:id="CNumCol" editable="false" minWidth="0.0" prefWidth="121.0" text="Номер" />
@@ -62,5 +67,11 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
+      <Label layoutX="16.0" layoutY="25.0" text="Поиск по" />
+      <Label layoutX="175.0" layoutY="25.0" text="Значение" AnchorPane.leftAnchor="175.0" AnchorPane.topAnchor="25.0" />
+      <ComboBox fx:id="SearchCB" accessibleRole="CHECK_BOX" layoutX="16.0" layoutY="42.0" onAction="#handleSwapCartridge" prefWidth="150.0" promptText="Названию" AnchorPane.leftAnchor="16.0" AnchorPane.topAnchor="42.0" />
+      <ComboBox fx:id="SearchStateCB" layoutX="175.0" layoutY="42.0" prefWidth="150.0" visible="false" />
+      <Button fx:id="SearchBtn" layoutX="335.0" layoutY="42.0" mnemonicParsing="false" onAction="#handleSearchCartridge" text="Поиск" />
+      <Button fx:id="SeacrhBtnRemove" layoutX="395.0" layoutY="42.0" mnemonicParsing="false" onAction="#handleRemoveQuerry" text="X" />
    </children>
 </AnchorPane>

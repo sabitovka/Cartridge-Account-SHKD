@@ -1,14 +1,8 @@
 package cartridgeaccount.database;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.Reader;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -64,12 +58,20 @@ public class DBHelper extends SQLIteOpenHelper {
 	}
 	
 	public ObservableList<Cartridge> selectCartridges() {
+		return selectCartridges("");
+	}
+	
+	public ObservableList<Cartridge> selectCartridges(String whereClause) {
         String sql =
                 "SELECT c.*, p.title as title_p, s.title as title_s \n" +
                 "FROM [cartridge] as c \n" +
                 "LEFT JOIN [producer] as p ON c.[producer] = p.[_id]\n" +
-                "LEFT JOIN states as s ON c.state = s.[_id_s]";
+                "LEFT JOIN states as s ON c.state = s.[_id_s]\n" + 
+                whereClause;
 
+        Log.d(TAG, sql);
+        
+        
         ObservableList<Cartridge> cartridges = FXCollections.observableArrayList();
 
         try {
@@ -101,8 +103,8 @@ public class DBHelper extends SQLIteOpenHelper {
         }
 
         return cartridges;
-    }
-
+	}
+	
 	public ObservableList<String> selectStates() {
 		ObservableList<String> list = FXCollections.observableArrayList();
 		

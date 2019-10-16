@@ -38,46 +38,32 @@ public class CartridgeEditDialogController {
 	
 	@FXML
 	private TableColumn<Refueling, Date> startDateColumn;
-
 	@FXML
 	private TableColumn<Refueling, Date> endDateColumn;
-	
 	@FXML
     private TableView<Refueling> refTable;
-	
 	@FXML
     private Tab tabRefuelings;
-
     @FXML
     private Tab tabSettings;
-	
     @FXML
     private ResourceBundle resources;
-
     @FXML
     private URL location;
-
     @FXML
     private Button Button_Cancel;
-
     @FXML
     private Button Button_OK;
-
     @FXML
     private ComboBox<String> ProdCB;
-
     @FXML
     private TextField NameTF;
-
     @FXML
     private TextField FullNameTF;
-
     @FXML
     private TextField NumTF;
-
     @FXML
     private ComboBox<String> StateCB;
-
     @FXML
     private TextArea NoteTF;
     
@@ -89,19 +75,7 @@ public class CartridgeEditDialogController {
     private Cartridge mCartridge;
     
     @FXML
-    void initialize() {
-        assert Button_Cancel != null : "fx:id=\"Button_Cancel\" was not injected: check your FXML file 'CartridgeEditDialog.fxml'.";
-        assert Button_OK != null : "fx:id=\"Button_OK\" was not injected: check your FXML file 'CartridgeEditDialog.fxml'.";
-        assert ProdCB != null : "fx:id=\"ProdCB\" was not injected: check your FXML file 'CartridgeEditDialog.fxml'.";
-        assert NameTF != null : "fx:id=\"NameTF\" was not injected: check your FXML file 'CartridgeEditDialog.fxml'.";
-        assert FullNameTF != null : "fx:id=\"FullNameTF\" was not injected: check your FXML file 'CartridgeEditDialog.fxml'.";
-        assert NumTF != null : "fx:id=\"NumTF\" was not injected: check your FXML file 'CartridgeEditDialog.fxml'.";
-        assert StateCB != null : "fx:id=\"StateCB\" was not injected: check your FXML file 'CartridgeEditDialog.fxml'.";
-        assert NoteTF != null : "fx:id=\"NoteTF\" was not injected: check your FXML file 'CartridgeEditDialog.fxml'.";
-
-        //StateCB.setOnAction(event -> mCartridge.setState(StateCB.getValue()));
-        
-    }
+    void initialize() {}
     
     public void setCartridge(Cartridge cartridge) {
     	this.mCartridge = cartridge;

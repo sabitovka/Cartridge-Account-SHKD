@@ -12,6 +12,7 @@ public class Repository {
 	
 	private DBHelper mDB;
 	private ObservableList<Cartridge> cartridges;
+	private ObservableList<Cartridge> filteredCartridges;
 	
 	private Repository() {
 		mDB = new DBHelper();
@@ -23,6 +24,26 @@ public class Repository {
 			mInstance = new Repository();
 		}
 		return mInstance;
+	}
+	
+	public ObservableList<Cartridge> querryCartridge(String column, String value) {
+		String sql = "WHERE %s LIKE %s";
+		
+		if (column.equals("state")) {
+			sql = String.format(sql, column, "(SELECT _id_s FROM states WHERE title LIKE '" + value + "')");
+		} else 
+			if (!value.isEmpty()) {
+				sql = String.format(sql, column, "'%" + value + "%'");
+			} else 
+				sql = "";
+		
+		if (sql.isEmpty()) {
+			return cartridges;
+		}
+		
+		filteredCartridges = mDB.selectCartridges(sql);
+		
+		return filteredCartridges;
 	}
 	
 	public ObservableList<Cartridge> getCartridges() {

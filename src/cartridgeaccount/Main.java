@@ -6,6 +6,7 @@ import cartridgeaccount.model.Cartridge;
 import cartridgeaccount.model.Repository;
 import cartridgeaccount.res.CartridgeEditDialogController;
 import cartridgeaccount.res.MainController;
+import cartridgeaccount.res.SearchDialogController;
 import javafx.application.Application;
 import javafx.collections.ObservableList;
 import javafx.stage.Modality;
@@ -72,6 +73,33 @@ public class Main extends Application {
 		} catch(IOException e) {
 			e.printStackTrace();
 			return false;
+		}
+	}
+	
+	public String showSearchDialog() {
+		try {
+			FXMLLoader loader = new FXMLLoader();
+			loader.setLocation(Main.class.getResource("res/SearchDialog.fxml"));
+			AnchorPane anchorPane = (AnchorPane) loader.load();
+			
+			Stage dialogStage = new Stage();
+			dialogStage.setTitle("Поиск картриджа");
+			dialogStage.initModality(Modality.APPLICATION_MODAL);
+			dialogStage.initOwner(mPrimaryStage);
+			Scene scene = new Scene(anchorPane);
+			dialogStage.setScene(scene);
+			dialogStage.setResizable(false);
+			dialogStage.initStyle(StageStyle.UTILITY);
+			
+			//SearchDialogController controller = loader.getController();
+			//controller.setDialogStage(dialogStage);
+			
+			dialogStage.showAndWait();
+			
+			return "";
+		} catch(IOException e) {
+			e.printStackTrace();
+			return "";
 		}
 	}
 	
